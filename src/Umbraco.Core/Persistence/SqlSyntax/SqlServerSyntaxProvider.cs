@@ -281,5 +281,14 @@ order by T.name, I.name");
         public override string DropIndex => "DROP INDEX {0} ON {1}";
 
         public override string RenameColumn => "sp_rename '{0}.{1}', '{2}', 'COLUMN'";
+
+        public override string GetConcat(params string[] args)
+        {
+            if(ServerVersion.ProductVersionName < VersionName.V2012)
+            {
+                return "(" + string.Join("+", args) + ")";
+            }
+            return base.GetConcat(args);
+        }
     }
 }
